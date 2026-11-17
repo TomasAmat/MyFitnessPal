@@ -1,0 +1,14 @@
+{{ form.non_field_errors }}
+<div class="datos">
+  {% with campo=form.peso %}{% include "nutricion/_dato.html" %}{% endwith %}
+  {% with campo=form.altura %}{% include "nutricion/_dato.html" %}{% endwith %}
+  {% with campo=form.edad %}{% include "nutricion/_dato.html" %}{% endwith %}
+  <div class="dato" role="radiogroup" aria-labelledby="lbl-sexo">
+    <span class="lbl" id="lbl-sexo">{{ form.sexo.label }}</span>
+    <div class="selector">{% for r in form.sexo %}<label title="{{ r.choice_label }}">{{ r.tag }}<span>{% if r.data.value == 'f' %}Fem.{% else %}Masc.{% endif %}</span></label>{% endfor %}</div>
+    <span class="para">{{ form.sexo.help_text }}</span>
+    {{ form.sexo.errors }}
+  </div>
+  {% with campo=form.actividad ancho=True %}{% include "nutricion/_dato.html" %}{% endwith %}
+  {% with campo=form.objetivo ancho=True %}{% include "nutricion/_dato.html" %}{% endwith %}
+</div>

@@ -1,0 +1,36 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Menú{% endblock %}
+{% block contenido %}
+<div class="perfil">
+  <span class="avatar" aria-hidden="true">{{ nombre|first }}</span>
+  <div style="min-width:0"><b>{{ nombre }}</b><p class="small muted">{% if objetivo %}Meta: {{ objetivo|lower }}{% else %}{{ user.email }}{% endif %}</p></div>
+</div>
+
+<div class="grupo">
+  <p class="etiqueta">Amigos</p>
+  <div class="tarjeta lista-menu">
+    <div class="fila inactiva"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.5 3-5.5 6.5-5.5s6 2 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5c2 .6 3.2 2.5 3.5 5.5"/></svg><span class="txt">Retos con amigos</span><span class="chip">Pronto</span></div>
+    <div class="fila inactiva"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="txt">Así te ven tus amigos</span><span class="chip">Pronto</span></div>
+  </div>
+</div>
+
+<div class="grupo">
+  <p class="etiqueta">Cuenta</p>
+  <div class="tarjeta lista-menu">
+    {% if perfil %}<a class="fila" href="{% url 'rectificar' %}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.5"/></svg><span class="txt">Perfil y metas</span>{% include "nutricion/_ir.html" %}</a>{% endif %}
+    <a class="fila" href="{% url 'permisos' %}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="6" width="10" height="12" rx="3"/><path d="M9 6l.5-3h5l.5 3M9 18l.5 3h5l.5-3"/></svg><span class="txt">Dispositivos conectados</span><span class="valor">{% if wearables %}Permitido{% else %}Ninguno{% endif %}</span>{% include "nutricion/_ir.html" %}</a>
+  </div>
+</div>
+
+<div class="grupo">
+  <p class="etiqueta ocre">Privacidad</p>
+  <div class="tarjeta lista-menu">
+    <a class="fila" href="{% url 'privacidad' %}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg><span class="txt">Centro de privacidad</span><span class="valor">{% if reforzada %}Reforzado{% else %}Estándar{% endif %}</span>{% include "nutricion/_ir.html" %}</a>
+    <a class="fila" href="{% url 'permisos' %}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7.5" cy="15.5" r="4"/><path d="M10.5 12.5L20 3M16 7l3 3M18 5l2 2"/></svg><span class="txt">Mis permisos</span><span class="valor">{{ activos }} de {{ total_permisos }}</span>{% include "nutricion/_ir.html" %}</a>
+    <a class="fila" href="{% url 'exportar_json' %}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg><span class="txt">Descargar mis datos</span>{% include "nutricion/_ir.html" %}</a>
+    <a class="fila peligro" href="{% url 'borrar' %}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span class="txt">Eliminar cuenta</span>{% include "nutricion/_ir.html" %}</a>
+  </div>
+</div>
+
+<form method="post" action="{% url 'salir' %}">{% csrf_token %}<button class="btn borde bajo">Cerrar sesión</button></form>
+{% endblock %}

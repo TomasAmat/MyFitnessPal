@@ -1,0 +1,8 @@
+<div class="encabezado">
+  <div class="barra">
+    {% if volver %}<a class="volver" href="{{ volver }}" aria-label="Volver"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>{% else %}<span class="balance" aria-hidden="true"></span>{% endif %}
+    <p>{{ texto }}</p>
+    <span class="balance" aria-hidden="true"></span>
+  </div>
+  {% if paso %}<div class="progreso-pasos" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="{{ paso }}" aria-label="Paso {{ paso }} de 3"><i style="width:{% widthratio paso 3 100 %}%"></i></div>{% endif %}
+</div>

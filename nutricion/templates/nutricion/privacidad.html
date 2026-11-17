@@ -1,0 +1,53 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Privacidad{% endblock %}
+{% block contenido %}
+{% url 'menu' as volver %}{% include "nutricion/_encabezado.html" with volver=volver texto="Ajustes" %}
+<div class="titulo"><h1>Centro de privacidad</h1></div>
+{% include "nutricion/_bloqueo.html" %}
+{% if not tabs %}<div class="aviso ocre" role="alert"><b>MyFitnessPal está en pausa</b><p>No diste o retiraste el permiso de datos de salud. Puedes ejercer todos tus derechos desde aquí. <a href="{% url 'permisos' %}">Revisar permisos</a></p></div>{% endif %}
+
+<section class="oscura" style="padding:16px 16px 14px">
+  <div class="linea">
+    <span id="lbl-reforzado">Modo privacidad reforzada</span>
+    <form method="post" action="{% url 'modo_reforzado' %}">{% csrf_token %}<button class="switch" role="switch" aria-checked="{{ reforzada|yesno:'true,false' }}" aria-labelledby="lbl-reforzado"></button></form>
+  </div>
+  <p class="detalle">{% if reforzada %}Sin publicidad basada en salud · Sin compartir con terceros · Datos solo para tu plan{% else %}Tienes activada publicidad o analítica de terceros. Actívalo para apagar ambas.{% endif %}</p>
+</section>
+
+<details class="tarjeta" id="mis-permisos">
+  <summary class="fila">
+    <span class="txt"><span class="t">Mis permisos</span><span class="d">{{ activos }} de {{ total_permisos }} activados{% if ultima %} · último cambio {{ ultima.fecha|date:"j M, H:i" }}{% endif %}</span></span>
+    {% include "nutricion/_ir.html" %}
+  </summary>
+  <div class="desplegado" style="border-top:1px solid var(--sep);margin-top:10px">
+    {% for f in filas %}
+    <div class="fila permiso">
+      <span class="txt"><span class="t">{{ f.titulo }}</span><span class="d">{{ f.detalle }}</span></span>
+      <form method="post" action="{% url 'cambiar_permiso' f.clave %}">{% csrf_token %}<button class="switch" role="switch" aria-checked="{{ f.activo|yesno:'true,false' }}" aria-label="{{ f.titulo }}"></button></form>
+    </div>
+    {% endfor %}
+    <p class="ayuda" style="padding-top:4px">El cambio aplica de inmediato y queda en tu historial.</p>
+  </div>
+</details>
+
+<div class="grupo">
+  <p class="etiqueta ocre">Tus derechos · Ley 21.719</p>
+  <div class="tarjeta derechos">
+    <a class="fila" href="{% url 'acceso' %}"><span class="letra" aria-hidden="true">A</span><span class="txt"><span class="t">Acceso</span><span class="d">Ver todos los datos que tenemos de ti</span></span>{% include "nutricion/_ir.html" %}</a>
+    {% if perfil %}<a class="fila" href="{% url 'rectificar' %}"><span class="letra" aria-hidden="true">R</span><span class="txt"><span class="t">Rectificación</span><span class="d">Corregir datos incorrectos</span></span>{% include "nutricion/_ir.html" %}</a>{% endif %}
+    <a class="fila" href="{% url 'borrar' %}"><span class="letra" aria-hidden="true">S</span><span class="txt"><span class="t">Supresión</span><span class="d">Eliminar tu cuenta y tus datos</span></span>{% include "nutricion/_ir.html" %}</a>
+    <a class="fila" href="{% url 'permisos' %}"><span class="letra" aria-hidden="true">O</span><span class="txt"><span class="t">Oposición</span><span class="d">Decir no a publicidad y perfilamiento</span></span>{% include "nutricion/_ir.html" %}</a>
+    <details>
+      <summary class="fila"><span class="letra" aria-hidden="true">P</span><span class="txt"><span class="t">Portabilidad</span><span class="d">Exportar tu historial (CSV o JSON)</span></span>{% include "nutricion/_ir.html" %}</summary>
+      <div class="botones"><a class="btn" href="{% url 'exportar_json' %}">Todo (JSON)</a><a class="btn borde" href="{% url 'exportar_csv' %}">Diario (CSV)</a></div>
+    </details>
+    {% if perfil %}
+    <div class="fila"><span class="letra" aria-hidden="true">B</span><span class="txt"><span class="t" id="lbl-bloqueo">Bloqueo temporal</span><span class="d">Pausar el uso de tus datos</span></span>
+      <form method="post" action="{% url 'bloqueo' %}">{% csrf_token %}<button class="switch" role="switch" aria-checked="{{ perfil.bloqueado|yesno:'true,false' }}" aria-labelledby="lbl-bloqueo"></button></form>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<p class="nota ocre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>Si la empresa cambia de dueño, te avisaremos antes de transferir tus datos y podrás eliminarlos.</p>
+{% if not tabs %}<form method="post" action="{% url 'salir' %}">{% csrf_token %}<button class="btn borde bajo">Cerrar sesión</button></form>{% endif %}
+{% endblock %}

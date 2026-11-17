@@ -1,0 +1,22 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Datos mínimos{% endblock %}
+{% block contenido %}
+{% url 'permisos' as volver %}{% include "nutricion/_encabezado.html" with volver=volver texto="Paso 3 de 3" paso=3 %}
+<div class="titulo">
+  <h1>Solo lo necesario para tu meta</h1>
+  <p class="sub">Pedimos estos datos para calcular tus calorías diarias. Te contamos para qué sirve cada uno.</p>
+</div>
+<form method="post" class="titulo" style="gap:18px;flex:1" novalidate>
+  {% csrf_token %}
+  {% include "nutricion/_form_perfil.html" %}
+  <div class="tarjeta opcionales">
+    <p style="font-size:13px;font-weight:600">Opcionales · los activas después si quieres</p>
+    <p class="opcional">Foto de perfil <span class="chip">No solicitado</span></p>
+    <p class="opcional">Fotos de comidas <span class="chip">No solicitado</span></p>
+    <p class="opcional">Reloj o pulsera deportiva <span class="chip">No solicitado</span></p>
+  </div>
+  <p class="nota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Tus datos de salud se usan solo para tu plan. Nunca para publicidad.</p>
+  <div class="espaciador"></div>
+  <button class="btn" type="submit">Continuar</button>
+</form>
+{% endblock %}

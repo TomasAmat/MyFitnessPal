@@ -1,0 +1,22 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Bienvenida{% endblock %}
+{% block color_tema %}#1C2E2B{% endblock %}
+{% block clase_body %}oscuro{% endblock %}
+{% block contenido %}
+<div class="marca" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="13"/><path d="M20 27v-6"/><path d="M20 21c0-4 2.5-6.5 6.5-6.5 0 4-2.5 6.5-6.5 6.5z"/><path d="M20 21c0-4-2.5-6.5-6.5-6.5 0 4 2.5 6.5 6.5 6.5z"/></svg></div>
+<div class="titulo">
+  <h1>MyFitnessPal</h1>
+  <p class="sub">Registra lo que comes y alcanza tu meta. Tus datos, bajo tu control.</p>
+</div>
+<div class="promesas">
+  <p class="promesa"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i>Pedimos solo lo necesario para tu plan</p>
+  <p class="promesa"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg></i>Tus datos de salud nunca se usan para publicidad</p>
+  <p class="promesa"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></i>Borras tu cuenta desde la app cuando quieras</p>
+</div>
+<div class="espaciador"></div>
+<div class="acciones">
+  <a class="btn crema" href="{% url 'crear_cuenta' %}">Crear cuenta</a>
+  <a class="btn borde crema" href="{% url 'entrar' %}">Ya tengo cuenta</a>
+</div>
+<p class="legal">Diseñada según la Ley 21.719 de protección de datos personales</p>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Mis datos{% endblock %}
+{% block contenido %}
+{% url 'privacidad' as volver %}{% include "nutricion/_encabezado.html" with volver=volver texto="Acceso" %}
+<div class="titulo">
+  <h1>Todo lo que guardamos de ti</h1>
+  <p class="sub">Ningún otro usuario puede ver estos datos y no se comparten con terceros.</p>
+</div>
+<div class="grupo">
+  <p class="etiqueta">Tus datos</p>
+  <div class="tarjeta tabla"><table>
+    <tr><th>Dato</th><th>Valor</th><th>Para qué</th></tr>
+    <tr><td>Correo</td><td>{{ user.email }}</td><td>Iniciar sesión</td></tr>
+    {% if perfil %}
+    <tr><td>Peso</td><td>{{ perfil.peso }} kg</td><td>Meta y progreso</td></tr>
+    <tr><td>Altura</td><td>{{ perfil.altura }} cm</td><td>Meta</td></tr>
+    <tr><td>Edad</td><td>{{ perfil.edad }}</td><td>Meta</td></tr>
+    <tr><td>Sexo</td><td>{{ perfil.get_sexo_display }}</td><td>Meta</td></tr>
+    <tr><td>Actividad</td><td>{{ perfil.get_actividad_display }}</td><td>Meta</td></tr>
+    <tr><td>Objetivo</td><td>{{ perfil.get_objetivo_display }}</td><td>Meta</td></tr>
+    {% endif %}
+    <tr><td>Comidas</td><td>{{ n_comidas }} registros</td><td>Diario</td></tr>
+    <tr><td>Pesos</td><td>{{ n_pesos }} registros</td><td>Progreso</td></tr>
+  </table></div>
+</div>
+<div class="grupo">
+  <p class="etiqueta">Permisos vigentes</p>
+  <div class="tarjeta">
+    {% for clave, activo in permisos.items %}<div class="fila"><span>{% for k, t in titulos.items %}{% if k == clave %}{{ t }}{% endif %}{% endfor %}</span>{% if activo %}<span class="chip menta">Activado</span>{% else %}<span class="chip">Apagado</span>{% endif %}</div>{% endfor %}
+  </div>
+</div>
+<div class="grupo">
+  <p class="etiqueta">Historial de permisos</p>
+  <div class="tarjeta tabla"><table>
+    <tr><th>Fecha</th><th>Permiso</th><th>Decisión</th></tr>
+    {% for h in historial %}<tr><td>{{ h.fecha|date:"j M H:i" }}</td><td>{{ h.get_permiso_display }}</td><td>{{ h.valor|yesno:"Activó,Desactivó" }}</td></tr>
+    {% empty %}<tr><td colspan="3">Sin decisiones registradas.</td></tr>{% endfor %}
+  </table></div>
+</div>
+{% if comidas %}
+<div class="grupo">
+  <p class="etiqueta">Últimas comidas</p>
+  <div class="tarjeta tabla"><table>
+    <tr><th>Fecha</th><th>Alimento</th><th class="der">Kcal</th></tr>
+    {% for r in comidas %}<tr><td>{{ r.fecha|date:"j M" }}</td><td>{{ r.nombre }}</td><td class="der">{{ r.total }}</td></tr>{% endfor %}
+  </table></div>
+</div>
+{% endif %}
+<p class="nota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Para llevarte tus datos usa Portabilidad en el Centro de privacidad.</p>
+{% endblock %}

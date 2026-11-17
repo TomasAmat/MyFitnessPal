@@ -1,0 +1,6 @@
+<div class="dato{% if ancho %} ancho{% endif %}">
+  <label for="{{ campo.id_for_label }}">{{ campo.label }}</label>
+  {{ campo }}
+  <span class="para">{{ campo.help_text }}</span>
+  {{ campo.errors }}
+</div>

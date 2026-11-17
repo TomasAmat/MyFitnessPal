@@ -1,0 +1,4 @@
+<div class="fila permiso">
+  <div class="txt"><label class="t" for="{{ campo.auto_id }}">{{ campo.label }}</label><span class="d">{{ campo.help_text }}</span></div>
+  <label class="switchwrap"><input type="checkbox" class="sr" role="switch" name="{{ campo.html_name }}" id="{{ campo.auto_id }}" {% if campo.value %}checked{% endif %}><span class="switch" aria-hidden="true"></span></label>
+</div>

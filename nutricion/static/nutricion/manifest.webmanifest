@@ -1,0 +1,14 @@
+{
+  "name": "MyFitnessPal · Privacidad reforzada",
+  "short_name": "MyFitnessPal",
+  "description": "Cuida lo que comes sin entregar tu privacidad.",
+  "start_url": "/diario/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F4F0E7",
+  "theme_color": "#2F6A5F",
+  "lang": "es-CL",
+  "icons": [
+    {"src": "icono.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}
+  ]
+}

@@ -1,0 +1,15 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Corregir datos{% endblock %}
+{% block contenido %}
+{% url 'privacidad' as volver %}{% include "nutricion/_encabezado.html" with volver=volver texto="Rectificación" %}
+<div class="titulo">
+  <h1>Corrige tus datos</h1>
+  <p class="sub">Al guardar, tu meta diaria se recalcula con los datos nuevos.</p>
+</div>
+<form method="post" class="titulo" style="gap:18px;flex:1" novalidate>
+  {% csrf_token %}
+  {% include "nutricion/_form_perfil.html" %}
+  <div class="espaciador"></div>
+  <button class="btn" type="submit">Guardar cambios</button>
+</form>
+{% endblock %}

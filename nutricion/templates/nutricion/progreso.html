@@ -1,0 +1,31 @@
+{% extends "nutricion/base.html" %}{% load myfitnesspal %}
+{% block titulo %}Progreso{% endblock %}
+{% block contenido %}
+<div class="cabecera">
+  <div><p class="fecha">Tus registros de peso</p><h1>Progreso</h1></div>
+</div>
+{% include "nutricion/_bloqueo.html" %}
+<section class="tarjeta" style="padding:16px;gap:4px" aria-label="Peso">
+  <p style="font-size:12px;font-weight:600;color:var(--muted)">Peso actual</p>
+  <div class="peso-actual"><b>{{ perfil.peso|floatformat:1 }} kg</b>{% if cambio is not None %}<span class="chip menta">{% if cambio > 0 %}+{% endif %}{{ cambio|floatformat:1 }} kg</span>{% endif %}</div>
+  {% if barras %}
+  <div class="barras" role="img" aria-label="Últimos {{ barras|length }} registros de peso">
+    {% for b in barras %}<div><i style="height:{{ b.alto }}px" title="{{ b.peso|floatformat:1 }} kg"></i><span>{{ b.etiqueta }}</span></div>{% endfor %}
+  </div>
+  {% else %}<p class="small muted" style="padding-top:8px">Registra tu peso en dos días distintos para ver tu evolución.</p>{% endif %}
+</section>
+<div class="resumen">
+  <div class="dato"><span class="lbl">Promedio diario</span><b>{{ promedio|miles }} kcal</b></div>
+  <div class="dato"><span class="lbl">Días registrados</span><b>{{ dias }}</b></div>
+</div>
+<div class="aviso"><b>Tu historial solo lo ves tú</b><p>Puedes exportarlo cuando quieras desde Menú › Descargar mis datos.</p></div>
+<form method="post" class="grupo" novalidate>
+  {% csrf_token %}
+  <p class="etiqueta">Registrar peso de hoy</p>
+  <div class="tarjeta" style="gap:12px;padding:14px">
+    {% with campo=form.peso %}{% include "nutricion/_campo.html" %}{% endwith %}
+    <p class="ayuda">Tu meta diaria se recalcula con el peso más reciente.</p>
+    <button class="btn" type="submit" {% if bloqueado %}disabled{% endif %}>Guardar</button>
+  </div>
+</form>
+{% endblock %}

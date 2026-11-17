@@ -1,0 +1,18 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Crear cuenta{% endblock %}
+{% block contenido %}
+{% url 'bienvenida' as volver %}{% include "nutricion/_encabezado.html" with volver=volver texto="Paso 1 de 3" paso=1 %}
+<div class="titulo">
+  <h1>Crea tu cuenta</h1>
+  <p class="sub">Solo un correo y una contraseña. Tu nombre, foto y contactos no los necesitamos.</p>
+</div>
+<form method="post" class="titulo" style="gap:14px;flex:1" novalidate>
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for campo in form %}{% include "nutricion/_campo.html" %}{% endfor %}
+  <p class="nota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Tu correo se usa solo para iniciar sesión. Nunca para publicidad.</p>
+  <div class="espaciador"></div>
+  <button class="btn" type="submit">Continuar</button>
+  <p class="small muted" style="text-align:center">¿Ya tienes cuenta? <a class="enlace fuerte" href="{% url 'entrar' %}">Inicia sesión</a></p>
+</form>
+{% endblock %}

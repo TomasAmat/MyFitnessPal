@@ -1,0 +1,36 @@
+{% extends "nutricion/base.html" %}{% load myfitnesspal %}
+{% block titulo %}Diario{% endblock %}
+{% block contenido %}
+<div class="cabecera">
+  <div><p class="fecha">{{ hoy|date:"l j \d\e F"|capfirst }}</p><h1>Hoy</h1></div>
+  {% if reforzada %}<a class="insignia" href="{% url 'privacidad' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg>Privacidad reforzada</a>
+  {% else %}<a class="insignia ocre" href="{% url 'privacidad' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg>Privacidad estándar</a>{% endif %}
+</div>
+{% include "nutricion/_bloqueo.html" %}
+<section class="oscura" aria-label="Resumen de calorías">
+  <p class="rotulo">{% if restante < 0 %}Calorías sobre la meta{% else %}Calorías restantes{% endif %}</p>
+  <p class="grande">{% if restante < 0 %}{{ exceso|miles }}{% else %}{{ restante|miles }}{% endif %}</p>
+  <div class="barra-kcal" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ anillo.pct }}" aria-label="{{ anillo.pct }}% de tu meta"><i class="{% if anillo.excedido %}excedido{% endif %}" style="width:{{ anillo.pct }}%"></i></div>
+  <div class="pie"><span>Meta {{ meta|miles }}</span><span>Comido {{ total|miles }}</span><span>{{ objetivo|capfirst }}</span></div>
+</section>
+<div class="tarjeta">
+  {% for c in comidas %}
+  <a class="fila" href="{% url 'agregar' %}?comida={{ c.nombre|urlencode }}">
+    <span>{{ c.nombre }}</span>
+    {% if c.items %}<b>{{ c.total|miles }} kcal</b>{% else %}<b style="color:var(--accent)">+ Agregar</b>{% endif %}
+  </a>
+  {% for r in c.items %}
+  <div class="comida-sub">
+    <span class="n">{{ r.nombre }} · {{ r.porciones|floatformat:"-1" }} × {{ r.porcion|default:"porción" }}</span>
+    <span>{{ r.total }} kcal</span>
+    <form method="post" action="{% url 'quitar' r.pk %}" class="inline">{% csrf_token %}<button class="quitar" {% if perfil.bloqueado %}disabled{% endif %} aria-label="Quitar {{ r.nombre }}">×</button></form>
+  </div>
+  {% endfor %}
+  {% endfor %}
+</div>
+{% if publicidad %}
+<div class="aviso ocre"><b>Anuncio</b><p>Espacio publicitario personalizado (simulado). Lo ves porque activaste la publicidad personalizada. <a href="{% url 'privacidad' %}">Cambiar</a></p></div>
+{% else %}
+<div class="aviso"><b>Sin anuncios basados en tu salud</b><p>Aquí iría un anuncio. Como no diste permiso, tu dieta y tu peso nunca se usan para publicidad.</p></div>
+{% endif %}
+{% endblock %}

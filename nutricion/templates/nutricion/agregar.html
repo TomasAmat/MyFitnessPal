@@ -1,0 +1,74 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Agregar comida{% endblock %}
+{% block contenido %}
+{% url 'diario' as volver %}{% include "nutricion/_encabezado.html" with volver=volver texto=comida %}
+<div class="titulo"><h1>¿Qué comiste?</h1></div>
+{% include "nutricion/_bloqueo.html" %}
+<nav class="chips" aria-label="Comida">
+  {% for c in comidas %}<a href="?comida={{ c|urlencode }}&q={{ q|urlencode }}" {% if c == comida %}aria-current="true"{% endif %}>{{ c }}</a>{% endfor %}
+</nav>
+<form method="get" role="search">
+  <input type="hidden" name="comida" value="{{ comida }}">
+  <label class="entrada" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><input id="q" name="q" type="search" value="{{ q }}" placeholder="Buscar alimento" aria-label="Buscar alimento" autocomplete="off"></label>
+</form>
+<div class="formas">
+  <a class="forma" href="?comida={{ comida|urlencode }}&camara=1">
+    <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 6v12M8.5 6v12M11 6v12M14.5 6v12M17 6v12M19.5 6v12"/></svg></span>
+    <b>Código de barras</b><span>Cámara solo al escanear</span>
+  </a>
+  <a class="forma" href="?comida={{ comida|urlencode }}&camara=1">
+    <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+    <b>Foto del plato</b><span class="ocre">Requiere permiso</span>
+  </a>
+  <a class="forma" href="#manual">
+    <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/></svg></span>
+    <b>Manual</b><span>Sin permisos</span>
+  </a>
+</div>
+<div class="grupo">
+  <p class="etiqueta">{% if q %}Resultados para “{{ q }}”{% else %}Alimentos frecuentes{% endif %}</p>
+  <div class="tarjeta">
+    {% for a in alimentos %}
+    <div class="fila">
+      <span class="txt"><span>{{ a.nombre }}</span><span class="porcion">{{ a.porcion }}</span></span>
+      <form method="post" class="kcal">{% csrf_token %}
+        <input type="hidden" name="comida" value="{{ comida }}"><input type="hidden" name="alimento" value="{{ a.pk }}">
+        {{ a.kcal }} kcal
+        <button class="mas" {% if bloqueado %}disabled{% endif %} aria-label="Agregar {{ a.nombre }} a {{ comida|lower }}">+</button>
+      </form>
+    </div>
+    {% empty %}<p class="small muted">No encontramos “{{ q }}”. Agrégalo a mano abajo.</p>{% endfor %}
+  </div>
+  <p class="small muted">Se agrega a <b>{{ comida|lower }}</b>. Calorías aproximadas por porción.</p>
+</div>
+<form method="post" class="grupo" id="manual" novalidate>
+  {% csrf_token %}
+  <p class="etiqueta">Agregar a mano</p>
+  <div class="tarjeta" style="gap:12px;padding:14px">
+    {% with campo=manual.comida %}{% include "nutricion/_campo.html" %}{% endwith %}
+    {% with campo=manual.nombre %}{% include "nutricion/_campo.html" %}{% endwith %}
+    <div class="resumen">
+      {% with campo=manual.kcal %}{% include "nutricion/_campo.html" %}{% endwith %}
+      {% with campo=manual.porciones %}{% include "nutricion/_campo.html" %}{% endwith %}
+    </div>
+    <button class="btn" type="submit" {% if bloqueado %}disabled{% endif %}>Agregar al diario</button>
+  </div>
+</form>
+{% if camara %}
+<div class="hoja" role="dialog" aria-modal="true" aria-labelledby="hoja-titulo">
+  <div class="panel">
+    <span class="asa" aria-hidden="true"></span>
+    <span class="ico-grande" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+    <div class="titulo">
+      <h2 id="hoja-titulo">¿Usar la cámara esta vez?</h2>
+      <p class="sub">Solo para leer el código o la foto de este plato. No guardamos las imágenes y te lo volvemos a preguntar la próxima vez.</p>
+    </div>
+    <form method="post" action="{% url 'escanear' %}" class="acciones">{% csrf_token %}
+      <button class="btn" name="permitir" value="1">Permitir solo esta vez</button>
+      <button class="btn borde" name="permitir" value="0">Ahora no</button>
+    </form>
+    <p class="nota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Tu decisión queda en tu historial de permisos.</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

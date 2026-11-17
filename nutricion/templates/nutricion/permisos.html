@@ -1,0 +1,35 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Permisos{% endblock %}
+{% block contenido %}
+{% if onboarding %}{% include "nutricion/_encabezado.html" with texto="Paso 2 de 3" paso=2 %}
+{% else %}{% url 'privacidad' as volver %}{% include "nutricion/_encabezado.html" with volver=volver texto="Mis permisos" %}{% endif %}
+<div class="titulo">
+  <h1>Tú decides qué compartir</h1>
+  <p class="sub">Cada permiso es independiente y puedes cambiarlo cuando quieras.</p>
+</div>
+{% if pausada %}<div class="aviso ocre" role="alert"><b>MyFitnessPal está en pausa</b><p>Retiraste el permiso de datos de salud. Actívalo para seguir usando el diario, o ve a <a href="{% url 'privacidad' %}">Privacidad</a> para descargar o borrar tus datos.</p></div>{% endif %}
+<form method="post" class="titulo" style="gap:14px;flex:1" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="aviso ocre" role="alert"><b>Falta un permiso</b><p>{{ form.non_field_errors.0 }}</p></div>{% endif %}
+  <div class="grupo">
+    <p class="etiqueta">Necesario para tu plan</p>
+    <div class="tarjeta">{% with campo=form.salud %}{% include "nutricion/_permiso.html" %}{% endwith %}</div>
+  </div>
+  <div class="grupo">
+    <p class="etiqueta">Funciones opcionales</p>
+    <div class="tarjeta">{% with campo=form.wearables %}{% include "nutricion/_permiso.html" %}{% endwith %}</div>
+  </div>
+  <div class="grupo">
+    <p class="etiqueta ocre">Comercial · separado de tu salud</p>
+    <div class="tarjeta comercial">
+      {% with campo=form.publicidad %}{% include "nutricion/_permiso.html" %}{% endwith %}
+      {% with campo=form.analitica %}{% include "nutricion/_permiso.html" %}{% endwith %}
+    </div>
+  </div>
+  <div class="espaciador"></div>
+  <div class="acciones" style="align-items:center">
+    <button class="btn" type="submit">Guardar mi selección</button>
+    {% if not onboarding %}<a class="enlace" href="{% url 'acceso' %}">Ver qué datos guardamos de ti</a>{% endif %}
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Eliminar cuenta{% endblock %}
+{% block contenido %}
+{% url 'privacidad' as volver %}{% include "nutricion/_encabezado.html" with volver=volver texto="Supresión" %}
+<div class="titulo">
+  <h1>Eliminar tu cuenta y tus datos</h1>
+  <p class="sub">Es un borrado real: no se archivan ni se anonimizan para venderlos.</p>
+</div>
+<div class="tarjeta" style="gap:6px">
+  <p style="font-size:12px;font-weight:600;color:var(--muted)">Se eliminará</p>
+  <ul class="lista-borrar">
+    <li>Tu cuenta ({{ user.email }}) y tu perfil</li>
+    <li>{{ n_comidas }} registro{{ n_comidas|pluralize }} de comida</li>
+    <li>{{ n_pesos }} registro{{ n_pesos|pluralize }} de peso</li>
+    <li>{{ n_historial }} decisi{{ n_historial|pluralize:"ón,ones" }} de permisos</li>
+  </ul>
+</div>
+<div class="tarjeta">
+  <div class="plazo"><span class="punto" aria-hidden="true"></span><div><b style="font-size:14px;font-weight:600">Al confirmar</b><p class="ayuda" style="line-height:1.35">Tu cuenta se cierra y tus datos se borran de la base de datos.</p></div></div>
+  <span class="conector" aria-hidden="true"></span>
+  <div class="plazo"><span class="punto hueco" aria-hidden="true"></span><div><b style="font-size:14px;font-weight:600">Sin copias</b><p class="ayuda" style="line-height:1.35">No guardamos respaldos ni versiones anónimas de tu historial.</p></div></div>
+  <span class="conector" aria-hidden="true"></span>
+  <div class="plazo"><span class="punto rojo" aria-hidden="true"></span><div><b style="font-size:14px;font-weight:600">Definitivo</b><p class="ayuda" style="line-height:1.35">No se puede deshacer. Descarga tus datos antes si los quieres.</p></div></div>
+</div>
+<a class="btn borde bajo" href="{% url 'exportar_json' %}">Descargar mis datos antes</a>
+<div class="espaciador"></div>
+<form method="post" class="titulo" novalidate>
+  {% csrf_token %}
+  {% with campo=form.confirmacion %}{% include "nutricion/_campo.html" %}{% endwith %}
+  <button class="btn peligro" type="submit">Eliminar definitivamente</button>
+</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "nutricion/base.html" %}
+{% block titulo %}Iniciar sesión{% endblock %}
+{% block contenido %}
+{% url 'bienvenida' as volver %}{% include "nutricion/_encabezado.html" with volver=volver texto="" %}
+<div class="titulo">
+  <h1>Hola de nuevo</h1>
+  <p class="sub">Ingresa con tu correo para ver tu diario.</p>
+</div>
+<form method="post" class="titulo" style="gap:18px" novalidate>
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="titulo" style="gap:14px">{% for campo in form %}{% include "nutricion/_campo.html" %}{% endfor %}</div>
+  <input type="hidden" name="next" value="{{ next }}">
+  <button class="btn" type="submit">Iniciar sesión</button>
+</form>
+<p class="separador">o</p>
+<a class="btn borde" href="{% url 'crear_cuenta' %}">Crear cuenta nueva</a>
+<div class="espaciador"></div>
+<p class="nota"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Tu contraseña se guarda cifrada. Nadie en MyFitnessPal puede verla.</p>
+{% endblock %}
