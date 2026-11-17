@@ -139,3 +139,4 @@ nutricion/
 - Las calorías del catálogo son aproximadas.
 - No hay recuperación de contraseña por correo (requiere configurar un servidor de correo).
 - Base de datos SQLite **sin cifrar en disco**: quien acceda al archivo puede leer los datos de salud (solo la contraseña está protegida). Suficiente para la demo y un curso; para producción real se usaría PostgreSQL con cifrado en reposo.
+# MyFitnessPal
